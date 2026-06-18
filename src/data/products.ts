@@ -1,0 +1,76 @@
+import { Product } from '../types';
+
+export const products: Product[] = [
+  {
+    id: 'm1',
+    name: 'Ceremonial Grade Usucha',
+    description: 'A delicate and smooth straight matcha made from shade-grown first harvest leaves of Uji, Kyoto. Served traditional style.',
+    price: 320,
+    category: 'Matcha Drinks',
+    imageUrl: '/Ceremonial Grade Usucha.png',
+  },
+  {
+    id: 'm2',
+    name: 'Okaasan Signature Matcha Latte',
+    description: 'Our house-blend matcha whisked to perfection, folded into velvety steamed oat milk and lightly sweetened with Hokkaido syrup.',
+    price: 240,
+    category: 'Matcha Drinks',
+    imageUrl: '/Okaasan Signature Matcha Latte.png',
+  },
+  {
+    id: 'm3',
+    name: 'Strawberry Matcha Cloud',
+    description: 'Fresh Philippine strawberry purée layered with pure matcha and topped with a cold, sweet cloud of macadamia foam.',
+    price: 280,
+    category: 'Matcha Drinks',
+    imageUrl: '/Strawberry Matcha Cloud.jpg',
+  },
+  {
+    id: 'c1',
+    name: 'Brews Lee Signature Hand Brew',
+    description: 'A comforting, medium-bodied pour-over featuring local Mt. Apo beans with notes of dark chocolate and ripe cherry.',
+    price: 190,
+    category: 'Coffee',
+    imageUrl: '/Brews Lee Signature Hand Brew.png',
+  },
+  {
+    id: 'c2',
+    name: 'Toasted Sesame Flat White',
+    description: 'Our deep espresso combined with textured milk and a hint of roasted black sesame. Earthy, rich, and grounding.',
+    price: 220,
+    category: 'Coffee',
+    imageUrl: '/Toasted Sesame Flat White.png',
+  },
+  {
+    id: 'c3',
+    name: 'Kyoto Cold Brew',
+    description: 'Slow-dripped over 14 hours using single-origin beans, resulting in an exceptionally clean, low-acidity brew.',
+    price: 210,
+    category: 'Coffee',
+    imageUrl: '/Kyoto Cold Brew.png',
+  },
+  {
+    id: 'p1',
+    name: 'Matcha White Chocolate Cookie',
+    description: 'A chunky, soft-baked cookie infused with culinary matcha and studded with premium white chocolate chunks.',
+    price: 130,
+    category: 'Pastries',
+    imageUrl: '/Matcha White Chocolate Cookie.png',
+  },
+  {
+    id: 'p2',
+    name: 'Yuzu Cheesecake Slice',
+    description: 'A light, airy Basque-style cheesecake accented with the brightness of Japanese yuzu citrus.',
+    price: 260,
+    category: 'Pastries',
+    imageUrl: '/Yuzu Cheesecake Slice.png',
+  },
+  {
+    id: 'p3',
+    name: 'Flaky Butter Croissant',
+    description: 'Baked fresh every morning. Shatteringly crisp on the outside, honeycomb layers of rich French butter on the inside.',
+    price: 150,
+    category: 'Pastries',
+    imageUrl: '/Flaky Butter Croissant.png',
+  }
+];
