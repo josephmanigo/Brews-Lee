@@ -335,7 +335,7 @@ CREATE OR REPLACE FUNCTION public.insert_address(
 RETURNS json
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, private
+SET search_path = public, private, extensions
 AS $$
 DECLARE
   v_key text := private.get_enc_key();
@@ -378,7 +378,7 @@ RETURNS TABLE (
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, private
+SET search_path = public, private, extensions
 AS $$
 DECLARE
   v_key text := private.get_enc_key();
@@ -418,7 +418,7 @@ CREATE OR REPLACE FUNCTION public.update_address(
 RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, private
+SET search_path = public, private, extensions
 AS $$
 DECLARE
   v_key text := private.get_enc_key();
@@ -445,7 +445,7 @@ CREATE OR REPLACE FUNCTION public.delete_address(p_id uuid)
 RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, private
+SET search_path = public, private, extensions
 AS $$
 DECLARE
   v_uid uuid := auth.uid();
@@ -475,7 +475,7 @@ CREATE OR REPLACE FUNCTION public.insert_order(
 RETURNS json
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, private
+SET search_path = public, private, extensions
 AS $$
 DECLARE
   v_key     text := private.get_enc_key();
@@ -523,7 +523,7 @@ RETURNS TABLE (
 )
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, private
+SET search_path = public, private, extensions
 AS $$
 DECLARE
   v_key text := private.get_enc_key();
@@ -558,7 +558,7 @@ CREATE OR REPLACE FUNCTION public.delete_order(p_id uuid)
 RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, private
+SET search_path = public, private, extensions
 AS $$
 DECLARE
   v_uid uuid := auth.uid();
