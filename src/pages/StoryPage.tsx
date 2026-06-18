@@ -219,7 +219,7 @@ export const StoryPage = () => {
             {[
               { name: 'Ryan Estoque', role: 'Visionary', image: '/RYAN ESTOQUE.jpg' },
               { name: 'Joseph Manigo', role: 'The Coffee Soul', image: '/JOSEPH MANIGO.jpg' },
-              { name: 'James Asoy', role: 'Craftsman', image: '/JAMES ASOY.jpg' },
+              { name: 'James Asoy', role: 'Craftsman', image: '/JAMES ASOY.jpg', imageClassName: 'object-[center_20%]' },
               { name: 'Stephen Bayate', role: 'Strategist', image: '/STEPHEN BAYATE.png' },
               { name: 'Lesther Quimpan', role: 'Architect', image: '/LESTHER QUIMPAN.jpg' },
             ].map((member, index) => (
@@ -233,7 +233,7 @@ export const StoryPage = () => {
               >
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-[#0d1b14] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-500 relative overflow-hidden">
                   {'image' in member && member.image ? (
-                    <img src={member.image} alt={member.name} className="absolute inset-0 w-full h-full object-cover" />
+                    <img src={member.image} alt={member.name} className={`absolute inset-0 w-full h-full object-cover ${'imageClassName' in member ? member.imageClassName : ''}`} />
                   ) : (
                     <>
                       <div className="absolute inset-0 bg-gradient-to-br from-[#0d1b14] to-[#2a3a2e] opacity-100" />

@@ -114,14 +114,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
           }
         }
 
-        // Fetch addresses — check error
-        const { data: addressData, error: addrError } = await supabase
-          .from('addresses').select('*').eq('user_id', userId);
+        // Fetch addresses — decrypted via secure RPC (plain table columns are encrypted bytea)
+        const { data: addressData, error: addrError } = await supabase.rpc('get_addresses');
         if (addrError) console.error('[BrewsLee] Addresses fetch error:', addrError.message);
 
-        // Fetch orders — check error
-        const { data: orderData, error: orderError } = await supabase
-          .from('orders').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+        // Fetch orders — decrypted via secure RPC (payment_method + address are encrypted bytea)
+        const { data: orderData, error: orderError } = await supabase.rpc('get_orders');
         if (orderError) console.error('[BrewsLee] Orders fetch error:', orderError.message);
 
         const formattedAddresses: Address[] = (addressData || []).map(a => ({
@@ -358,15 +356,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const addOrder = useCallback(async (order: Order) => {
     if (!user) return;
     try {
-      const { data, error } = await supabase.from('orders').insert({
-        user_id: user.id,
-        total: order.total,
-        status: order.status,
-        payment_method: order.paymentMethod,
-        delivery_type: order.deliveryType,
-        items: order.items,
-        address: order.address
-      }).select().single();
+      // insert_order RPC encrypts payment_method and address snapshot server-side
+      const { data, error } = await supabase.rpc('insert_order', {
+        p_total:          order.total,
+        p_status:         order.status,
+        p_payment_method: order.paymentMethod,
+        p_delivery_type:  order.deliveryType,
+        p_items:          order.items,
+        p_address:        order.address ?? null
+      });
       
       if (error) throw error;
       
@@ -417,7 +415,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const removeOrder = useCallback(async (id: string) => {
     if (!user) return;
     try {
-      await supabase.from('orders').delete().eq('id', id).eq('user_id', user.id);
+      await supabase.rpc('delete_order', { p_id: id });
       // Ignore error for local fallback
       setUser(prev => {
         if (!prev) return prev;
@@ -434,16 +432,16 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const addAddress = useCallback(async (address: Address) => {
     if (!user) return;
     try {
-      const { data, error } = await supabase.from('addresses').insert({
-        user_id: user.id,
-        full_name: address.fullName,
-        mobile: address.mobile,
-        street_address: address.streetAddress,
-        barangay: address.barangay,
-        city: address.city,
-        province: address.province,
-        zip_code: address.zipCode
-      }).select().single();
+      // insert_address RPC encrypts full_name, mobile, street_address server-side
+      const { data, error } = await supabase.rpc('insert_address', {
+        p_full_name:      address.fullName,
+        p_mobile:         address.mobile,
+        p_street_address: address.streetAddress,
+        p_barangay:       address.barangay,
+        p_city:           address.city,
+        p_province:       address.province,
+        p_zip_code:       address.zipCode
+      });
       
       if (error) throw error;
       
@@ -485,15 +483,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const updateAddress = useCallback(async (id: string, address: Omit<Address, 'id'>) => {
     if (!user) return;
     try {
-      await supabase.from('addresses').update({
-        full_name: address.fullName,
-        mobile: address.mobile,
-        street_address: address.streetAddress,
-        barangay: address.barangay,
-        city: address.city,
-        province: address.province,
-        zip_code: address.zipCode
-      }).eq('id', id).eq('user_id', user.id);
+      // update_address RPC re-encrypts the PII fields server-side
+      await supabase.rpc('update_address', {
+        p_id:             id,
+        p_full_name:      address.fullName,
+        p_mobile:         address.mobile,
+        p_street_address: address.streetAddress,
+        p_barangay:       address.barangay,
+        p_city:           address.city,
+        p_province:       address.province,
+        p_zip_code:       address.zipCode
+      });
       
       setUser(prev => {
         if (!prev) return prev;
@@ -510,7 +510,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const removeAddress = useCallback(async (id: string) => {
     if (!user) return;
     try {
-      await supabase.from('addresses').delete().eq('id', id).eq('user_id', user.id);
+      await supabase.rpc('delete_address', { p_id: id });
       
       setUser(prev => {
         if (!prev) return prev;
