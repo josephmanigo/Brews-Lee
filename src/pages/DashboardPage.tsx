@@ -37,6 +37,9 @@ export const DashboardPage = () => {
   // Order cancellation modal state
   const [cancellingOrderId, setCancellingOrderId] = useState<string | null>(null);
 
+  // Sign out modal state
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
   // Grace period: don't redirect to login immediately — give auth state time to settle
   const [authGracePeriod, setAuthGracePeriod] = useState(true);
 
@@ -152,7 +155,7 @@ export const DashboardPage = () => {
             </button>
             <div className="pt-8 mt-8 border-t border-matcha-300">
               <button 
-                onClick={handleLogout}
+                onClick={() => setIsSigningOut(true)}
                 className="flex items-center gap-3 w-full p-4 rounded-xl font-sans font-medium text-red-600 hover:bg-red-50 transition-colors"
               >
                 <LogOut className="w-5 h-5" />
@@ -482,24 +485,85 @@ export const DashboardPage = () => {
                 
                 <div className="space-y-4">
                   <button
-                    onClick={() => setCancellingOrderId(null)}
-                    className="w-full py-4 font-sans font-bold tracking-[0.2em] uppercase text-[11px] transition-all flex items-center justify-center"
-                    style={{ background: '#c1f23e', color: '#0a1811' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = '#d4ff50')}
-                    onMouseLeave={e => (e.currentTarget.style.background = '#c1f23e')}
-                  >
-                    Keep Order
-                  </button>
-                  <button
                     onClick={() => {
                       removeOrder(cancellingOrderId);
                       setCancellingOrderId(null);
                       addToast('Order cancelled successfully', 'success');
                     }}
-                    className="w-full font-sans text-white/30 hover:text-red-400 transition-colors text-center uppercase tracking-[0.1em]"
-                    style={{ fontSize: '11px' }}
+                    className="w-full py-4 font-sans font-bold tracking-[0.2em] uppercase text-[11px] transition-all flex items-center justify-center"
+                    style={{ background: '#c1f23e', color: '#0a1811' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = '#d4ff50')}
+                    onMouseLeave={e => (e.currentTarget.style.background = '#c1f23e')}
                   >
                     Yes, Cancel Order
+                  </button>
+                  <button
+                    onClick={() => setCancellingOrderId(null)}
+                    className="w-full font-sans text-white/30 hover:text-white transition-colors text-center uppercase tracking-[0.1em]"
+                    style={{ fontSize: '11px' }}
+                  >
+                    Keep Order
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Sign Out Confirmation Modal */}
+      <AnimatePresence>
+        {isSigningOut && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            style={{ backgroundColor: 'rgba(10,24,17,0.75)', backdropFilter: 'blur(6px)' }}
+            onClick={() => setIsSigningOut(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 40, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.97 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              onClick={e => e.stopPropagation()}
+              className="relative w-full max-w-[420px] overflow-hidden border border-white/10"
+              style={{ background: '#0e1a12' }}
+            >
+              <div className="px-8 pb-10 pt-10">
+                <div className="w-8 h-[2px] mb-6" style={{ background: '#c1f23e' }} />
+                
+                <h3 
+                  className="font-serif text-white mb-3"
+                  style={{ fontSize: '26px', lineHeight: 1.2, fontWeight: 400 }}
+                >
+                  Sign Out?
+                </h3>
+                <p 
+                  className="font-sans text-white/50 mb-10"
+                  style={{ fontSize: '13px', lineHeight: 1.7, letterSpacing: '0.02em' }}
+                >
+                  Are you sure you want to sign out of your account? You will need to log in again to access your orders and settings.
+                </p>
+                
+                <div className="space-y-4">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full py-4 font-sans font-bold tracking-[0.2em] uppercase text-[11px] transition-all flex items-center justify-center"
+                    style={{ background: '#c1f23e', color: '#0a1811' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = '#d4ff50')}
+                    onMouseLeave={e => (e.currentTarget.style.background = '#c1f23e')}
+                  >
+                    Yes, Sign Out
+                  </button>
+                  <button
+                    onClick={() => setIsSigningOut(false)}
+                    className="w-full font-sans text-white/30 hover:text-white transition-colors text-center uppercase tracking-[0.1em]"
+                    style={{ fontSize: '11px' }}
+                  >
+                    Cancel
                   </button>
                 </div>
               </div>
